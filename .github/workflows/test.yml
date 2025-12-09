@@ -9,16 +9,16 @@ jobs:
   tests:
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-15]
     runs-on: ${{ matrix.os }}
     env:
       # HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK is set to 1 to disable the automatic upgrade of formulae during the brew install process.
       # This can help prevent unexpected failures in GitHub Actions.
       HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # pin@v4
-      - uses: cachix/install-nix-action@6a9a9e84a173d90b3ffb42c5ddaf9ea033fad011 # pin@v23
-      - uses: cachix/cachix-action@6a9a34cdd93d0ae4b4b59fd678660efb08109f2f # pin@v12
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
           name: devenv
       - name: Install devenv.sh
@@ -27,10 +27,9 @@ jobs:
       - name: Build the devenv shell and run any pre-commit hooks
         run: devenv ci
 
-      # https://github.com/Homebrew/actions/blob/55e35ac78132cc31ce174408f40a9676e64aa0e2/setup-homebrew/README.md?plain=1#L10-L12
+      # https://github.com/Homebrew/actions/blob/646376e6958cd0bf5f97dbc589637255c018d8f0/setup-homebrew/README.md?plain=1#L10-L12
       - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@55e35ac78132cc31ce174408f40a9676e64aa0e2 # pin@55e35ac78132cc31ce174408f40a9676e64aa0e2
+        uses: Homebrew/actions/setup-homebrew@646376e6958cd0bf5f97dbc589637255c018d8f0 # main
 
       - name: Install formula
-        # Without this `--formula`, Homebrew tries to interpret `extension.rb` as a cask, leading to a warning.
-        run: brew install --formula extension.rb
+        run: brew install extension
